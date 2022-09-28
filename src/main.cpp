@@ -12,6 +12,7 @@
 #include <QSplashScreen>
 #include <QPixmap>
 #include "mainwindow.h"
+#include "PLCOpenParserGenerator.h"
 
 #include <stdint.h>
 #include "ConfigVersion.h"
@@ -39,6 +40,8 @@ int main(int argc, char **argv)
 #endif
 
     mainShowInfo();
+
+    PLCOpenParserGenerator::test();
 
     QApplication a(argc, argv);
     QPixmap pixmap(":/icons/icons/autobio_logo.jpg");

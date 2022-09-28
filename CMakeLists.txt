@@ -24,6 +24,8 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Network REQUIRED)
+find_package(Qt5Xml REQUIRED)
+find_package(Qt5XmlPatterns REQUIRED)
 
 file(GLOB_RECURSE qui_data RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/ *.ui)
 file(GLOB_RECURSE qrc_data RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/ *.qrc)
@@ -38,16 +40,22 @@ set(qt_srcs
 set(plc_incs
     ${PROJECT_BINARY_DIR}
     src
-    src/ui)
+    src/ui
+    src/plc
+    src/core)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/GitVersion.cmake)
 
 # setup sources
 aux_source_directory(src main_srcs)
 aux_source_directory(src/ui ui_srcs)
+aux_source_directory(src/core core_srcs)
+aux_source_directory(src/plc plc_srcs)
 
 set(src_srcs
     ${main_srcs}
+    ${core_srcs}
+    ${plc_srcs}
     # qt gui
     ${ui_srcs}
     ${qt_srcs}
@@ -58,12 +66,14 @@ SET(CMAKE_CXX_FLAGS "-O3 -Wall -Wunused-function -fpermissive")
 SET(CMAKE_C_FLAGS "-O3 -Wall -Wunused-function --std=gnu99")
 add_definitions(-D_POSIX -D__USE_MISC)
 
+SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -Wl,-Map=${CMAKE_PROJECT_NAME}.map")
+
 # add includes
 include_directories(${plc_incs})
 
 # generate library
 add_executable(netPLCEditor ${src_srcs})
-qt5_use_modules(netPLCEditor Core Widgets Gui Network)
+qt5_use_modules(netPLCEditor Core Widgets Gui Network Xml XmlPatterns)
 
 if(WIN32)
     target_link_libraries(netPLCEditor

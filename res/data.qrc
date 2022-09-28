@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/data">
+        <file>plcopen/POU_Project_Template.xml</file>
+    </qresource>
+</RCC>
